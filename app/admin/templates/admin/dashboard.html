@@ -1,0 +1,83 @@
+{% extends "layout.html" %}
+
+{% block content %}
+<div class="space-y-8">
+  <div class="rounded-3xl border border-slate-200 bg-white p-6 shadow-sm">
+    <div class="flex items-center justify-between">
+      <div>
+        <p class="text-xs uppercase tracking-[0.2em] text-slate-500">Admin dashboard</p>
+        <h1 class="mt-2 text-3xl font-semibold text-slate-900">Platform overview</h1>
+      </div>
+    </div>
+    <div class="mt-6 grid gap-4 sm:grid-cols-2 xl:grid-cols-4">
+      <div class="rounded-3xl border border-slate-200 bg-slate-50 p-5">
+        <p class="text-sm text-slate-500">Users</p>
+        <p class="mt-3 text-3xl font-semibold text-slate-900">{{ stats.users }}</p>
+      </div>
+      <div class="rounded-3xl border border-slate-200 bg-slate-50 p-5">
+        <p class="text-sm text-slate-500">Roles</p>
+        <p class="mt-3 text-3xl font-semibold text-slate-900">{{ stats.roles }}</p>
+      </div>
+      <div class="rounded-3xl border border-slate-200 bg-slate-50 p-5">
+        <p class="text-sm text-slate-500">Permissions</p>
+        <p class="mt-3 text-3xl font-semibold text-slate-900">{{ stats.permissions }}</p>
+      </div>
+      <div class="rounded-3xl border border-slate-200 bg-slate-50 p-5">
+        <p class="text-sm text-slate-500">Audit events</p>
+        <p class="mt-3 text-3xl font-semibold text-slate-900">{{ stats.audit_events }}</p>
+      </div>
+    </div>
+  </div>
+
+  <div class="grid gap-6 xl:grid-cols-3">
+    <section class="rounded-3xl border border-slate-200 bg-white p-6 shadow-sm xl:col-span-1">
+      <h2 class="text-lg font-semibold text-slate-900">User management</h2>
+      <div class="mt-4 space-y-3">
+        {% for user in users[:5] %}
+          <div class="rounded-2xl border border-slate-200 bg-slate-50 p-4">
+            <p class="font-semibold text-slate-900">{{ user.email }}</p>
+            <p class="text-sm text-slate-500">{{ user.full_name or 'No name provided' }}</p>
+          </div>
+        {% endfor %}
+      </div>
+    </section>
+
+    <section class="rounded-3xl border border-slate-200 bg-white p-6 shadow-sm xl:col-span-1">
+      <h2 class="text-lg font-semibold text-slate-900">Role management</h2>
+      <div class="mt-4 space-y-3">
+        {% for role in roles[:5] %}
+          <div class="rounded-2xl border border-slate-200 bg-slate-50 p-4">
+            <p class="font-semibold text-slate-900">{{ role.name }}</p>
+            <p class="text-sm text-slate-500">{{ role.description or 'No description' }}</p>
+          </div>
+        {% endfor %}
+      </div>
+    </section>
+
+    <section class="rounded-3xl border border-slate-200 bg-white p-6 shadow-sm xl:col-span-1">
+      <h2 class="text-lg font-semibold text-slate-900">Permission management</h2>
+      <div class="mt-4 space-y-3">
+        {% for permission in permissions[:5] %}
+          <div class="rounded-2xl border border-slate-200 bg-slate-50 p-4">
+            <p class="font-semibold text-slate-900">{{ permission.name }}</p>
+            <p class="text-sm text-slate-500">{{ permission.description or 'No description' }}</p>
+          </div>
+        {% endfor %}
+      </div>
+    </section>
+  </div>
+
+  <section class="rounded-3xl border border-slate-200 bg-white p-6 shadow-sm">
+    <h2 class="text-lg font-semibold text-slate-900">Recent audit events</h2>
+    <div class="mt-4 space-y-2">
+      {% for event in audit_logs %}
+        <div class="rounded-2xl border border-slate-200 bg-slate-50 p-4">
+          <p class="text-sm font-semibold text-slate-900">{{ event.action }}</p>
+          <p class="text-sm text-slate-600">{{ event.created_at.strftime('%Y-%m-%d %H:%M:%S') }}</p>
+          <p class="text-sm text-slate-500">{{ event.resource_type or 'system' }} {{ event.resource_id or '' }}</p>
+        </div>
+      {% endfor %}
+    </div>
+  </section>
+</div>
+{% endblock %}
