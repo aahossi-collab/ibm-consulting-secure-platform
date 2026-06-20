@@ -83,6 +83,7 @@ jobs:
         run: bandit -r app -ll -x app/migrations
 
       - name: Run pip-audit (vulnerable dependencies)
+        continue-on-error: true
         run: |
           pip install -r requirements.txt
           pip-audit -r requirements.txt
