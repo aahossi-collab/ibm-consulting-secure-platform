@@ -7,3 +7,4 @@ Flask-Script>=2.0
 python-dotenv>=1.0
 psycopg2-binary>=2.9
 Flask-Limiter>=2.10
+email-validator>=2.0.0

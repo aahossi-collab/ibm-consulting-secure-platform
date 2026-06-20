@@ -1,8 +1,8 @@
 """Initial schema
 
-Revision ID: ff68ae4c95fb
+Revision ID: f6591a68e32e
 Revises: 
-Create Date: 2026-06-18 08:42:11.830340
+Create Date: 2026-06-19 11:25:06.927050
 
 """
 from alembic import op
@@ -10,7 +10,7 @@ import sqlalchemy as sa
 
 
 # revision identifiers, used by Alembic.
-revision = 'ff68ae4c95fb'
+revision = 'f6591a68e32e'
 down_revision = None
 branch_labels = None
 depends_on = None
@@ -23,7 +23,7 @@ def upgrade():
     sa.Column('email', sa.String(length=255), nullable=True),
     sa.Column('phone', sa.String(length=60), nullable=True),
     sa.Column('address', sa.Text(), nullable=True),
-    sa.Column('id', sa.UUID(), nullable=False),
+    sa.Column('id', sa.String(length=36), nullable=False),
     sa.Column('created_at', sa.DateTime(), nullable=False),
     sa.Column('updated_at', sa.DateTime(), nullable=False),
     sa.PrimaryKeyConstraint('id'),
@@ -32,7 +32,7 @@ def upgrade():
     op.create_table('permissions',
     sa.Column('name', sa.String(length=120), nullable=False),
     sa.Column('description', sa.Text(), nullable=True),
-    sa.Column('id', sa.UUID(), nullable=False),
+    sa.Column('id', sa.String(length=36), nullable=False),
     sa.Column('created_at', sa.DateTime(), nullable=False),
     sa.Column('updated_at', sa.DateTime(), nullable=False),
     sa.PrimaryKeyConstraint('id'),
@@ -42,7 +42,7 @@ def upgrade():
     op.create_table('roles',
     sa.Column('name', sa.String(length=80), nullable=False),
     sa.Column('description', sa.Text(), nullable=True),
-    sa.Column('id', sa.UUID(), nullable=False),
+    sa.Column('id', sa.String(length=36), nullable=False),
     sa.Column('created_at', sa.DateTime(), nullable=False),
     sa.Column('updated_at', sa.DateTime(), nullable=False),
     sa.PrimaryKeyConstraint('id'),
@@ -57,7 +57,7 @@ def upgrade():
     sa.Column('is_active', sa.Boolean(), nullable=False),
     sa.Column('failed_login_attempts', sa.Integer(), nullable=False),
     sa.Column('lockout_until', sa.DateTime(), nullable=True),
-    sa.Column('id', sa.UUID(), nullable=False),
+    sa.Column('id', sa.String(length=36), nullable=False),
     sa.Column('created_at', sa.DateTime(), nullable=False),
     sa.Column('updated_at', sa.DateTime(), nullable=False),
     sa.PrimaryKeyConstraint('id'),
@@ -67,10 +67,10 @@ def upgrade():
         batch_op.create_index(batch_op.f('ix_users_email'), ['email'], unique=True)
 
     op.create_table('administrators',
-    sa.Column('user_id', sa.UUID(), nullable=False),
+    sa.Column('user_id', sa.String(length=36), nullable=False),
     sa.Column('department', sa.String(length=120), nullable=True),
     sa.Column('active', sa.Boolean(), nullable=False),
-    sa.Column('id', sa.UUID(), nullable=False),
+    sa.Column('id', sa.String(length=36), nullable=False),
     sa.Column('created_at', sa.DateTime(), nullable=False),
     sa.Column('updated_at', sa.DateTime(), nullable=False),
     sa.ForeignKeyConstraint(['user_id'], ['users.id'], ondelete='CASCADE'),
@@ -79,13 +79,13 @@ def upgrade():
     sa.UniqueConstraint('user_id')
     )
     op.create_table('audit_logs',
-    sa.Column('user_id', sa.UUID(), nullable=True),
+    sa.Column('user_id', sa.String(length=36), nullable=True),
     sa.Column('action', sa.String(length=255), nullable=False),
     sa.Column('resource_type', sa.String(length=120), nullable=True),
     sa.Column('resource_id', sa.String(length=255), nullable=True),
     sa.Column('ip_address', sa.String(length=45), nullable=True),
     sa.Column('event_metadata', sa.JSON(), nullable=True),
-    sa.Column('id', sa.UUID(), nullable=False),
+    sa.Column('id', sa.String(length=36), nullable=False),
     sa.Column('created_at', sa.DateTime(), nullable=False),
     sa.Column('updated_at', sa.DateTime(), nullable=False),
     sa.ForeignKeyConstraint(['user_id'], ['users.id'], ondelete='SET NULL'),
@@ -96,8 +96,8 @@ def upgrade():
     sa.Column('title', sa.String(length=255), nullable=False),
     sa.Column('description', sa.Text(), nullable=True),
     sa.Column('status', sa.String(length=80), nullable=False),
-    sa.Column('client_id', sa.UUID(), nullable=False),
-    sa.Column('id', sa.UUID(), nullable=False),
+    sa.Column('client_id', sa.String(length=36), nullable=False),
+    sa.Column('id', sa.String(length=36), nullable=False),
     sa.Column('created_at', sa.DateTime(), nullable=False),
     sa.Column('updated_at', sa.DateTime(), nullable=False),
     sa.ForeignKeyConstraint(['client_id'], ['clients.id'], ondelete='CASCADE'),
@@ -105,12 +105,12 @@ def upgrade():
     sa.UniqueConstraint('id')
     )
     op.create_table('connection_history',
-    sa.Column('user_id', sa.UUID(), nullable=False),
+    sa.Column('user_id', sa.String(length=36), nullable=False),
     sa.Column('ip_address', sa.String(length=45), nullable=True),
     sa.Column('user_agent', sa.String(length=255), nullable=True),
     sa.Column('login_at', sa.DateTime(), nullable=False),
     sa.Column('logout_at', sa.DateTime(), nullable=True),
-    sa.Column('id', sa.UUID(), nullable=False),
+    sa.Column('id', sa.String(length=36), nullable=False),
     sa.Column('created_at', sa.DateTime(), nullable=False),
     sa.Column('updated_at', sa.DateTime(), nullable=False),
     sa.ForeignKeyConstraint(['user_id'], ['users.id'], ondelete='CASCADE'),
@@ -118,13 +118,13 @@ def upgrade():
     sa.UniqueConstraint('id')
     )
     op.create_table('contact_messages',
-    sa.Column('client_id', sa.UUID(), nullable=True),
+    sa.Column('client_id', sa.String(length=36), nullable=True),
     sa.Column('name', sa.String(length=255), nullable=False),
     sa.Column('email', sa.String(length=255), nullable=False),
     sa.Column('subject', sa.String(length=255), nullable=True),
     sa.Column('message', sa.Text(), nullable=False),
     sa.Column('received_at', sa.DateTime(), nullable=False),
-    sa.Column('id', sa.UUID(), nullable=False),
+    sa.Column('id', sa.String(length=36), nullable=False),
     sa.Column('created_at', sa.DateTime(), nullable=False),
     sa.Column('updated_at', sa.DateTime(), nullable=False),
     sa.ForeignKeyConstraint(['client_id'], ['clients.id'], ondelete='SET NULL'),
@@ -132,15 +132,15 @@ def upgrade():
     sa.UniqueConstraint('id')
     )
     op.create_table('role_permissions',
-    sa.Column('role_id', sa.UUID(), nullable=False),
-    sa.Column('permission_id', sa.UUID(), nullable=False),
+    sa.Column('role_id', sa.String(length=36), nullable=False),
+    sa.Column('permission_id', sa.String(length=36), nullable=False),
     sa.ForeignKeyConstraint(['permission_id'], ['permissions.id'], ondelete='CASCADE'),
     sa.ForeignKeyConstraint(['role_id'], ['roles.id'], ondelete='CASCADE'),
     sa.PrimaryKeyConstraint('role_id', 'permission_id')
     )
     op.create_table('user_roles',
-    sa.Column('user_id', sa.UUID(), nullable=False),
-    sa.Column('role_id', sa.UUID(), nullable=False),
+    sa.Column('user_id', sa.String(length=36), nullable=False),
+    sa.Column('role_id', sa.String(length=36), nullable=False),
     sa.ForeignKeyConstraint(['role_id'], ['roles.id'], ondelete='CASCADE'),
     sa.ForeignKeyConstraint(['user_id'], ['users.id'], ondelete='CASCADE'),
     sa.PrimaryKeyConstraint('user_id', 'role_id')
@@ -153,9 +153,9 @@ def upgrade():
     sa.Column('file_size', sa.Integer(), nullable=False),
     sa.Column('version', sa.Integer(), nullable=False),
     sa.Column('confidential', sa.Boolean(), nullable=False),
-    sa.Column('parent_id', sa.UUID(), nullable=True),
-    sa.Column('case_id', sa.UUID(), nullable=False),
-    sa.Column('id', sa.UUID(), nullable=False),
+    sa.Column('parent_id', sa.String(length=36), nullable=True),
+    sa.Column('case_id', sa.String(length=36), nullable=False),
+    sa.Column('id', sa.String(length=36), nullable=False),
     sa.Column('created_at', sa.DateTime(), nullable=False),
     sa.Column('updated_at', sa.DateTime(), nullable=False),
     sa.ForeignKeyConstraint(['case_id'], ['cases.id'], ondelete='CASCADE'),

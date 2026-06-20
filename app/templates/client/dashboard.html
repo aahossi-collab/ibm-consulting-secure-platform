@@ -1,5 +1,13 @@
 {% extends "layout.html" %}
 
 {% block content %}
-<h1>Client Dashboard</h1>
+<div class="container py-4">
+  <div class="card shadow-sm">
+    <div class="card-body">
+      <h1 class="h3 mb-3">Espace Client</h1>
+      <p class="lead mb-2">Bienvenue, {{ current_user.full_name or current_user.email }}</p>
+      <span class="badge bg-primary">Client</span>
+    </div>
+  </div>
+</div>
 {% endblock %}

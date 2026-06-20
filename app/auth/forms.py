@@ -4,7 +4,7 @@ from wtforms.validators import DataRequired, Email, EqualTo, Length, ValidationE
 import re
 
 PASSWORD_REGEX = re.compile(
-    r"^(?=.*[a-z])(?=.*[A-Z])(?=.*\\d)(?=.*[^A-Za-z0-9]).{12,}$"
+    r"^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[^A-Za-z0-9]).{12,}$"
 )
 
 from app.models import User

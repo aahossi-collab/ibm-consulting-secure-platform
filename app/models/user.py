@@ -83,3 +83,26 @@ class User(BaseModel, UserMixin):
     @property
     def full_name(self) -> str:
         return " ".join(filter(None, [self.first_name, self.last_name]))
+
+    def has_role(self, role_name: str) -> bool:
+        """Return True when the user has the given role name.
+
+        Comparison is case-insensitive and ignores surrounding whitespace.
+        """
+        if not role_name:
+            return False
+
+        role_name_normalized = role_name.strip().lower()
+        return any((role.name or "").strip().lower() == role_name_normalized for role in self.roles)
+
+    def has_permission(self, permission_name: str) -> bool:
+        """Return True when the user has the named permission via any role."""
+        if not permission_name:
+            return False
+
+        permission_name_normalized = permission_name.strip().lower()
+        for role in self.roles:
+            for permission in role.permissions:
+                if (permission.name or "").strip().lower() == permission_name_normalized:
+                    return True
+        return False

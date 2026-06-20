@@ -1,0 +1,51 @@
+{% extends "layout.html" %}
+
+{% block content %}
+<div class="container py-4">
+  <div class="d-flex flex-column flex-md-row justify-content-between align-items-start align-items-md-center mb-4 gap-3">
+    <div>
+      <h1 class="h3">Welcome, {{ current_user.full_name or current_user.email }}</h1>
+      <p class="mb-0">{{ current_user.email }}</p>
+      <div class="mt-2">
+        {% for role in current_user.roles %}
+          <span class="badge bg-secondary me-1">{{ role.name }}</span>
+        {% else %}
+          <span class="text-muted">No roles</span>
+        {% endfor %}
+      </div>
+    </div>
+    <div>
+      <a href="{{ url_for('public.logout') }}" class="btn btn-outline-danger">Logout</a>
+    </div>
+  </div>
+
+  <div class="row g-3">
+    <div class="col-12 col-md-4">
+      <div class="card h-100 shadow-sm">
+        <div class="card-body">
+          <h5 class="card-title">My Cases</h5>
+          <p class="card-text">View and manage your cases.</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="col-12 col-md-4">
+      <div class="card h-100 shadow-sm">
+        <div class="card-body">
+          <h5 class="card-title">My Documents</h5>
+          <p class="card-text">Access your documents and uploads.</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="col-12 col-md-4">
+      <div class="card h-100 shadow-sm">
+        <div class="card-body">
+          <h5 class="card-title">Profile</h5>
+          <p class="card-text">View and edit your profile information.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}

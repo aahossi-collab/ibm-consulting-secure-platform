@@ -1,6 +1,7 @@
 from flask import abort, flash, redirect, render_template, request, send_file, url_for
 from flask_login import current_user, login_required
 
+from app.auth.decorators import role_required
 from app.models import Case, Document
 from app.security.audit import AuditLogger
 from app.security.rbac import (
@@ -22,7 +23,9 @@ from .forms import (
 
 
 @client_bp.route("/")
-def dashboard():
+@login_required
+@role_required("Client")
+def index():
     return render_template("client/dashboard.html")
 
 

@@ -7,10 +7,10 @@ from app.models.user import User
 
 
 def get_csrf(html: str):
-    m = re.search(r'name=["']csrf_token["'] type=["']hidden["'] value=["']([^"']+)["']', html)
+    m = re.search(r"name=[\"']csrf_token[\"'] type=[\"']hidden[\"'] value=[\"']([^\"']+)[\"']", html)
     if m:
         return m.group(1)
-    m = re.search(r'name=["']csrf_token["'] value=["']([^"']+)["']', html)
+    m = re.search(r"name=[\"']csrf_token[\"'] value=[\"']([^\"']+)[\"']", html)
     return m.group(1) if m else None
 
 

@@ -1,0 +1,18 @@
+{% extends "layout.html" %}
+
+{% block content %}
+<div class="container py-5">
+  <div class="row justify-content-center">
+    <div class="col-12 col-md-8">
+      <div class="card shadow-sm">
+        <div class="card-body text-center">
+          <h1 class="h3 mb-3">Aucun rôle assigné</h1>
+          <p class="lead mb-3">Votre compte n'a pas encore de rôle attribué.</p>
+          <p class="mb-4">Veuillez contacter un administrateur pour obtenir l'accès à un tableau de bord approprié.</p>
+          <a href="{{ url_for('public.logout') }}" class="btn btn-outline-primary">Se déconnecter</a>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}

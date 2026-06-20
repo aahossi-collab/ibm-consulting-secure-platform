@@ -2,10 +2,11 @@ from datetime import datetime, timedelta
 
 from flask import flash, redirect, render_template, request, url_for, session
 from flask_login import current_user, login_required, login_user, logout_user
-from werkzeug.urls import url_parse
+from urllib.parse import urlparse
 
 from app.extensions import db, limiter
 from app.models import User
+from app.services.auth_service import AuthService
 from app.security.audit import AuditLogger
 from . import auth_bp
 from .forms import LoginForm, PasswordResetForm, PasswordResetRequestForm, RegistrationForm
@@ -13,27 +14,38 @@ from .forms import LoginForm, PasswordResetForm, PasswordResetRequestForm, Regis
 
 def _get_safe_redirect_url(default="public.index"):
     next_page = request.args.get("next")
-    if not next_page or url_parse(next_page).netloc != "":
+
+    if not next_page:
         return url_for(default)
+
+    parsed = urlparse(next_page)
+
+    if parsed.netloc:
+        return url_for(default)
+
     return next_page
 
 
 @auth_bp.route("/register", methods=["GET", "POST"])
 def register():
     if current_user.is_authenticated:
-        return redirect(url_for("public.index"))
+        return redirect(url_for("dashboard.index"))
 
     form = RegistrationForm()
     if form.validate_on_submit():
-        user = User(
-            email=form.email.data.lower(),
-            first_name=form.first_name.data,
-            last_name=form.last_name.data,
-        )
-        user.set_password(form.password.data)
         try:
-            db.session.add(user)
-            db.session.commit()
+            user = AuthService.create_user(
+                email=form.email.data,
+                password=form.password.data,
+                first_name=form.first_name.data,
+                last_name=form.last_name.data,
+            )
+        except ValueError as e:
+            if str(e) == "email_exists":
+                form.email.errors.append("An account with this email already exists.")
+                return render_template("auth/register.html", form=form)
+            flash("An error occurred creating your account. Please try again.", "danger")
+            return render_template("auth/register.html", form=form)
         except Exception:
             db.session.rollback()
             flash("An error occurred creating your account. Please try again.", "danger")
@@ -78,7 +90,7 @@ def login():
 
             AuditLogger.log_login_success(user)
             next_page = _get_safe_redirect_url()
-            return redirect(next_page)
+            return redirect(url_for("dashboard.index"))
 
         # If we have a matching user, increment failed attempts
         if user:

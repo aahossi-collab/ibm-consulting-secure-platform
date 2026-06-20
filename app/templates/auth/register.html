@@ -1,0 +1,70 @@
+{% extends "layout.html" %}
+
+{% block content %}
+<div class="d-flex align-items-center justify-content-center min-vh-100 py-5">
+  <div class="card shadow-sm border-0 w-100" style="max-width: 460px;">
+    <div class="card-body p-4 p-md-5">
+      <div class="text-center mb-4">
+        <div class="mb-3">
+          <i class="bi bi-person-plus-fill text-primary fs-1"></i>
+        </div>
+        <h1 class="h4 fw-bold mb-1">Create your Secure Platform account</h1>
+        <p class="text-muted mb-0">Start with secure access for IBM Consulting.</p>
+      </div>
+
+      <form method="post" novalidate>
+        {{ form.hidden_tag() }}
+
+        <div class="mb-3">
+          {{ form.email.label(class="form-label fw-semibold") }}
+          {{ form.email(class="form-control", placeholder="Email address", autofocus=True) }}
+          {% for error in form.email.errors %}
+            <div class="invalid-feedback d-block">{{ error }}</div>
+          {% endfor %}
+        </div>
+
+        <div class="mb-3">
+          {{ form.first_name.label(class="form-label fw-semibold") }}
+          {{ form.first_name(class="form-control", placeholder="First name") }}
+          {% for error in form.first_name.errors %}
+            <div class="invalid-feedback d-block">{{ error }}</div>
+          {% endfor %}
+        </div>
+
+        <div class="mb-3">
+          {{ form.last_name.label(class="form-label fw-semibold") }}
+          {{ form.last_name(class="form-control", placeholder="Last name") }}
+          {% for error in form.last_name.errors %}
+            <div class="invalid-feedback d-block">{{ error }}</div>
+          {% endfor %}
+        </div>
+
+        <div class="mb-3">
+          {{ form.password.label(class="form-label fw-semibold") }}
+          {{ form.password(class="form-control", placeholder="Password") }}
+          {% for error in form.password.errors %}
+            <div class="invalid-feedback d-block">{{ error }}</div>
+          {% endfor %}
+        </div>
+
+        <div class="mb-3">
+          {{ form.confirm_password.label(class="form-label fw-semibold") }}
+          {{ form.confirm_password(class="form-control", placeholder="Confirm password") }}
+          {% for error in form.confirm_password.errors %}
+            <div class="invalid-feedback d-block">{{ error }}</div>
+          {% endfor %}
+        </div>
+
+        <div class="d-grid mb-3">
+          {{ form.submit(class="btn btn-primary btn-lg") }}
+        </div>
+      </form>
+
+      <div class="text-center mt-3">
+        <span class="text-muted">Already have an account?</span>
+        <a href="{{ url_for('auth.login') }}" class="fw-semibold text-decoration-none">Sign in</a>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}
