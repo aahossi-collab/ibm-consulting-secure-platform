@@ -103,15 +103,36 @@ def login():
         # If we have a matching user, increment failed attempts
         if user:
             user.increment_failed_logins()
+
+            print(
+                "FAILED:",
+                user.failed_login_attempts,
+                user.lockout_until,
+                user.is_locked,
+                )
+
             try:
                 db.session.add(user)
                 db.session.commit()
-            except Exception:
+
+                db.session.refresh(user)
+
+                print(
+                    "DB FAILED:",
+                    user.failed_login_attempts,
+                    "DB LOCKOUT:",
+                    user.lockout_until,
+                )
+
+            except Exception as e:
+                print("COMMIT ERROR:", e)
                 db.session.rollback()
 
             if user.is_locked:
-                AuditLogger.log_account_lockout(user, ip_address=request.remote_addr)
-
+                AuditLogger.log_account_lockout(
+                    user,
+                    ip_address=request.remote_addr,
+                )
         AuditLogger.log_login_failure(email, ip_address=request.remote_addr)
         flash("Invalid email or password.", "danger")
 
