@@ -6,7 +6,6 @@ from app.models import Case, Document
 from app.security.audit import AuditLogger
 from app.security.rbac import (
     PERMISSION_MANAGE_CASES,
-    PERMISSION_MANAGE_DOCUMENTS,
     PERMISSION_UPLOAD_DOCUMENT,
     PERMISSION_VIEW_CASE,
     require_permission,
@@ -16,7 +15,6 @@ from app.services.document_service import DocumentService
 from . import client_bp
 from .forms import (
     CaseCreateForm,
-    CaseSearchForm,
     CaseUpdateForm,
     DocumentUploadForm,
 )

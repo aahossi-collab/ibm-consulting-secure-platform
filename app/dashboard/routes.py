@@ -1,5 +1,6 @@
 from flask import redirect, render_template, url_for
 from flask_login import current_user, login_required
+from app.security.rbac import require_role
 
 from . import dashboard_bp
 
@@ -21,6 +22,6 @@ def index():
 
 @dashboard_bp.route("/admin-only")
 @login_required
-@role_required("Administrator")
+@require_role("Administrator")
 def admin_only():
     return "Si tu vois ça, le RBAC fonctionne ✅"

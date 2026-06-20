@@ -1,4 +1,4 @@
-from datetime import datetime, timedelta
+from datetime import timedelta
 
 from flask import flash, redirect, render_template, request, url_for, session
 from flask_login import current_user, login_required, login_user, logout_user
@@ -89,7 +89,6 @@ def login():
                 db.session.rollback()
 
             AuditLogger.log_login_success(user)
-            next_page = _get_safe_redirect_url()
             return redirect(url_for("dashboard.index"))
 
         # If we have a matching user, increment failed attempts

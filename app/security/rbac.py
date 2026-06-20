@@ -3,7 +3,7 @@ from functools import wraps
 from flask import abort, g
 from flask_login import current_user
 
-from app.models import Permission, Role
+# permission and role models are referenced via relationships on User elsewhere
 
 ROLE_CLIENT = "client"
 ROLE_ADMINISTRATOR = "administrator"

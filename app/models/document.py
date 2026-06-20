@@ -22,8 +22,8 @@ class Document(BaseModel):
         "Case",
         back_populates="documents",
     )
-parent = db.relationship(
-    "Document",
-    remote_side=lambda: [Document.id],
-    backref="revisions",
-)
+    parent = db.relationship(
+        "Document",
+        remote_side=lambda: [Document.id],
+        backref="revisions",
+    )

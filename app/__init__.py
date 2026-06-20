@@ -1,16 +1,16 @@
 import os
 from flask import Flask
 
-from app.models.user import User
 from config import config_by_name
 from .extensions import csrf, db, login_manager, migrate, limiter
+from app.security.rbac import RbacManager
 from .auth import auth_bp
 from .public import public_bp
 from .client import client_bp
 from .admin import admin_bp
 from .consultant import consultant_bp
 from .dashboard import dashboard_bp
-from . import models
+from . import models  # noqa: F401
 
 
 def create_app(config_name=None):
@@ -32,6 +32,7 @@ def register_extensions(app):
     login_manager.init_app(app)
     csrf.init_app(app)
     limiter.init_app(app)
+    RbacManager.init_app(app)
     login_manager.login_view = app.config.get("LOGIN_VIEW")
     login_manager.session_protection = "strong"
 
