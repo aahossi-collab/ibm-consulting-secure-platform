@@ -2,6 +2,7 @@
 
 Keep business logic (user creation, lookup) here so routes remain thin.
 """
+
 from typing import Optional
 
 from app.extensions import db
@@ -16,7 +17,9 @@ class AuthService:
         return User.query.filter_by(email=email.lower().strip()).first()
 
     @staticmethod
-    def create_user(email: str, password: str, first_name: str = None, last_name: str = None) -> User:
+    def create_user(
+        email: str, password: str, first_name: str = None, last_name: str = None
+    ) -> User:
         email_norm = (email or "").lower().strip()
         if AuthService.find_by_email(email_norm):
             raise ValueError("email_exists")

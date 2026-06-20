@@ -12,10 +12,7 @@ from wtforms.validators import (
 
 from app.models import User
 
-
-PASSWORD_REGEX = re.compile(
-    r"^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[^A-Za-z0-9]).{12,}$"
-)
+PASSWORD_REGEX = re.compile(r"^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[^A-Za-z0-9]).{12,}$")
 
 
 class RegistrationForm(FlaskForm):
@@ -45,9 +42,7 @@ class RegistrationForm(FlaskForm):
     def validate_email(self, email):
         user = User.query.filter_by(email=email.data.lower()).first()
         if user:
-            raise ValidationError(
-                "An account with this email already exists."
-            )
+            raise ValidationError("An account with this email already exists.")
 
     def validate_password(self, password):
         if not PASSWORD_REGEX.match(password.data or ""):
@@ -96,4 +91,3 @@ class PasswordResetForm(FlaskForm):
             )
 
     submit = SubmitField("Reset Password")
-    

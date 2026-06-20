@@ -12,7 +12,9 @@ class Document(BaseModel):
     file_size = db.Column(db.Integer, nullable=False)
     version = db.Column(db.Integer, nullable=False, default=1)
     confidential = db.Column(db.Boolean, default=False, nullable=False)
-    parent_id = db.Column(db.ForeignKey("documents.id", ondelete="SET NULL"), nullable=True)
+    parent_id = db.Column(
+        db.ForeignKey("documents.id", ondelete="SET NULL"), nullable=True
+    )
 
     case_id = db.Column(
         db.ForeignKey("cases.id", ondelete="CASCADE"),

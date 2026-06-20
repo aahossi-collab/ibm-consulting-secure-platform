@@ -54,9 +54,7 @@ class RbacManager:
         if not user:
             return set()
         return {
-            permission.name
-            for role in user.roles
-            for permission in role.permissions
+            permission.name for role in user.roles for permission in role.permissions
         }
 
     @staticmethod
@@ -75,7 +73,9 @@ class RbacManager:
                 if not current_user.is_authenticated:
                     abort(403)
 
-                if not any(RbacManager.has_role(current_user, role) for role in role_names):
+                if not any(
+                    RbacManager.has_role(current_user, role) for role in role_names
+                ):
                     abort(403)
 
                 return fn(*args, **kwargs)

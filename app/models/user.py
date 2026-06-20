@@ -5,7 +5,6 @@ from app.extensions import db
 from .base import BaseModel
 from datetime import datetime, timedelta
 
-
 user_roles = db.Table(
     "user_roles",
     db.Column(
@@ -65,7 +64,9 @@ class User(BaseModel, UserMixin):
     def check_password(self, password: str) -> bool:
         return check_password_hash(self.password_hash, password)
 
-    def increment_failed_logins(self, max_attempts: int = 5, lock_minutes: int = 15) -> None:
+    def increment_failed_logins(
+        self, max_attempts: int = 5, lock_minutes: int = 15
+    ) -> None:
         self.failed_login_attempts = (self.failed_login_attempts or 0) + 1
         if self.failed_login_attempts >= max_attempts:
             self.lockout_until = datetime.utcnow() + timedelta(minutes=lock_minutes)
@@ -93,7 +94,10 @@ class User(BaseModel, UserMixin):
             return False
 
         role_name_normalized = role_name.strip().lower()
-        return any((role.name or "").strip().lower() == role_name_normalized for role in self.roles)
+        return any(
+            (role.name or "").strip().lower() == role_name_normalized
+            for role in self.roles
+        )
 
     def has_permission(self, permission_name: str) -> bool:
         """Return True when the user has the named permission via any role."""
@@ -103,6 +107,8 @@ class User(BaseModel, UserMixin):
         permission_name_normalized = permission_name.strip().lower()
         for role in self.roles:
             for permission in role.permissions:
-                if (permission.name or "").strip().lower() == permission_name_normalized:
+                if (
+                    permission.name or ""
+                ).strip().lower() == permission_name_normalized:
                     return True
         return False

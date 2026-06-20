@@ -45,7 +45,10 @@ class DocumentService:
             raise ValueError("MIME type not allowed")
 
         content_length = getattr(file_storage, "content_length", None)
-        if content_length is not None and content_length > current_app.config["MAX_CONTENT_LENGTH"]:
+        if (
+            content_length is not None
+            and content_length > current_app.config["MAX_CONTENT_LENGTH"]
+        ):
             raise ValueError("File size exceeds limit")
 
         storage_path = DocumentService._build_storage_path(file_storage.filename)
@@ -55,7 +58,11 @@ class DocumentService:
             os.remove(storage_path)
             raise ValueError("Malicious file content detected")
 
-        existing = Document.query.filter_by(case_id=case_id, title=title).order_by(Document.version.desc()).first()
+        existing = (
+            Document.query.filter_by(case_id=case_id, title=title)
+            .order_by(Document.version.desc())
+            .first()
+        )
         version = existing.version + 1 if existing else 1
 
         document = Document(

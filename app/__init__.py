@@ -50,11 +50,23 @@ def register_blueprints(app):
     # Map public-friendly endpoints to the existing auth view functions.
     # Use distinct endpoint names so we don't overwrite blueprint endpoints.
     if "auth.login" in app.view_functions:
-        app.add_url_rule("/login", endpoint="public.login", view_func=app.view_functions.get("auth.login"))
+        app.add_url_rule(
+            "/login",
+            endpoint="public.login",
+            view_func=app.view_functions.get("auth.login"),
+        )
     if "auth.register" in app.view_functions:
-        app.add_url_rule("/register", endpoint="public.register", view_func=app.view_functions.get("auth.register"))
+        app.add_url_rule(
+            "/register",
+            endpoint="public.register",
+            view_func=app.view_functions.get("auth.register"),
+        )
     if "auth.logout" in app.view_functions:
-        app.add_url_rule("/logout", endpoint="public.logout", view_func=app.view_functions.get("auth.logout"))
+        app.add_url_rule(
+            "/logout",
+            endpoint="public.logout",
+            view_func=app.view_functions.get("auth.logout"),
+        )
     app.register_blueprint(client_bp, url_prefix="/client")
     app.register_blueprint(consultant_bp, url_prefix="/consultant")
     app.register_blueprint(dashboard_bp, url_prefix="/dashboard")

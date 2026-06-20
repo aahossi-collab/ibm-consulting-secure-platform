@@ -1,7 +1,6 @@
 from app.extensions import db
 from .base import BaseModel
 
-
 role_permissions = db.Table(
     "role_permissions",
     db.Column(

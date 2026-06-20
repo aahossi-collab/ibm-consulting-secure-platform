@@ -9,7 +9,12 @@ from app.models import User
 from app.services.auth_service import AuthService
 from app.security.audit import AuditLogger
 from . import auth_bp
-from .forms import LoginForm, PasswordResetForm, PasswordResetRequestForm, RegistrationForm
+from .forms import (
+    LoginForm,
+    PasswordResetForm,
+    PasswordResetRequestForm,
+    RegistrationForm,
+)
 
 
 def _get_safe_redirect_url(default="public.index"):
@@ -44,11 +49,15 @@ def register():
             if str(e) == "email_exists":
                 form.email.errors.append("An account with this email already exists.")
                 return render_template("auth/register.html", form=form)
-            flash("An error occurred creating your account. Please try again.", "danger")
+            flash(
+                "An error occurred creating your account. Please try again.", "danger"
+            )
             return render_template("auth/register.html", form=form)
         except Exception:
             db.session.rollback()
-            flash("An error occurred creating your account. Please try again.", "danger")
+            flash(
+                "An error occurred creating your account. Please try again.", "danger"
+            )
             return render_template("auth/register.html", form=form)
 
         AuditLogger.log_user_created(user)
@@ -129,7 +138,9 @@ def reset_password_request():
     if form.validate_on_submit():
         # OWASP: Do not reveal whether an email exists.
         # Log the reset request in audit (do not reveal existence)
-        AuditLogger.log_password_reset_request((form.email.data or "").lower(), ip_address=request.remote_addr)
+        AuditLogger.log_password_reset_request(
+            (form.email.data or "").lower(), ip_address=request.remote_addr
+        )
         flash(
             "If an account with that email exists, you will receive instructions to reset your password.",
             "info",
