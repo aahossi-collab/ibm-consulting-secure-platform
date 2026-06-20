@@ -109,7 +109,7 @@ def login():
                 user.failed_login_attempts,
                 user.lockout_until,
                 user.is_locked,
-                )
+            )
 
             try:
                 db.session.add(user)
